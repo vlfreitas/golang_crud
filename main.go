@@ -13,6 +13,10 @@ func main() {
 
 	router := server.Group("api/v1")
 
+	router.GET("/hello", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusMovedPermanently, "https://br.pinterest.com/pin/861524603709141306/")
+	})
+
 	router.GET("/healthchecker", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Up"})
 	})
