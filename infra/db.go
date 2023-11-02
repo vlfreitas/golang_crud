@@ -2,24 +2,35 @@ package infra
 
 import (
 	"fmt"
+	"log"
+	"os"
 
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-const (
-	DB_NAME = "golang_crud"
-	DB_HOST = "localhost"
-	DB_USER = "root"
-	DB_PASS = "12345678"
-	DB_PORT = "3306"
-)
+type Database struct {
+	DB *gorm.DB
+}
 
-func Connect() *gorm.DB {
+func InitDb() Database {
+	USER := os.Getenv("DB_USER")
+	PASS := os.Getenv("DB_PASSWORD")
+	HOST := os.Getenv("DB_HOST")
+	DBNAME := os.Getenv("DB_NAME")
 
-	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME))
+	URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS,
+		HOST, DBNAME)
+	fmt.Println(URL)
+	db, err := gorm.Open(mysql.Open(URL))
+
 	if err != nil {
-		fmt.Errorf("erro ao conectar com database")
+		panic("Failed to connect to database!")
 	}
 
-	return db
+	log.Print("Database connect!")
+	return Database{
+		DB: db,
+	}
+
 }

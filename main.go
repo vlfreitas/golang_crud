@@ -1,6 +1,8 @@
 package main
 
 import (
+	"go-crud/infra"
+	"go-crud/models"
 	"log"
 	"net/http"
 
@@ -9,16 +11,17 @@ import (
 
 func main() {
 	server := gin.Default()
-	gin.SetMode(gin.TestMode)
 
-	router := server.Group("api/v1")
-
-	router.GET("/hello", func(ctx *gin.Context) {
-		ctx.Redirect(http.StatusMovedPermanently, "https://br.pinterest.com/pin/861524603709141306/")
+	server.GET("/healthcheck", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "App Running!"})
 	})
 
-	router.GET("/healthchecker", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"status": "success", "message": "Up"})
-	})
+	// Load Env
+	infra.InitEnv()
+
+	// Init DB and Migrate Models
+	db := infra.InitDb()
+	db.DB.AutoMigrate(&models.User{})
+
 	log.Fatal(server.Run()) // listen and serve on 0.0.0.0:8080
 }
