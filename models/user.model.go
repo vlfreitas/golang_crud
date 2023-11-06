@@ -11,7 +11,7 @@ type User struct {
 	Name     string `gorm:"size:255;not null" json:"name"`
 	Age      int    `gorm:"not null" json:"age"`
 	Email    string `gorm:"size:100;not null;unique" json:"email"`
-	Password string `gorm:"size:100;not null;" json:"password"`
+	Password string `gorm:"size:100;not null;" json:"-"`
 	Address  string `gorm:"size:255;not null" json:"address"`
 }
 
@@ -20,12 +20,17 @@ func (user *User) BeforeCreate(db *gorm.DB) error {
 	return nil
 }
 
-func (user *User) ResponseMap() map[string]interface{} {
-	resp := make(map[string]interface{})
-	resp["id"] = user.ID
-	resp["email"] = user.Email
-	resp["name"] = user.Name
-	resp["age"] = user.Age
-	resp["address"] = user.Address
-	return resp
+type UserRegister struct {
+	Name     string `form:"name" gorm:"name" json:"name" binding:"required"`
+	Age      int    `form:"age" json:"age" binding:"required"`
+	Email    string `form:"email" json:"email" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
+	Address  string `form:"address" json:"address" binding:"required"`
+}
+
+type UserUpdate struct {
+	Name    string `form:"name"json:"name"`
+	Age     int    `form:"age" json:"age"`
+	Email   string `form:"email" json:"email"`
+	Address string `form:"address" json:"address" `
 }
