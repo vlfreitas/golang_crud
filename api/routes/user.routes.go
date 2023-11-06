@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"go-crud/api/controller"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserRouteController struct {
@@ -16,10 +17,9 @@ func NewUserRouteController(
 }
 
 func (u *UserRouteController) Setup(r *gin.RouterGroup) {
-	router := r.Group("/api/v1/users")
-	router.POST("/create", u.userController.Create)
-	router.GET("/:id", u.userController.GetById)
-	router.GET("/", u.userController.ListAll)
-	router.PUT("/:id", u.userController.Update)
-	router.DELETE("/:id", u.userController.DeleteById)
+	r.POST("/create", u.userController.Create)
+	r.GET("/:id", u.userController.GetById)
+	r.GET("/", u.userController.ListAll)
+	r.PUT("/:id", u.userController.Update)
+	r.DELETE("/:id", u.userController.DeleteById)
 }

@@ -20,6 +20,14 @@ func NewUserController(DB *gorm.DB) UserController {
 	return UserController{DB}
 }
 
+// CreateUser		godoc
+// @Summary			Create users
+// @Description		Save users data in Db.
+// @Param			users body models.UserRegister true "Create users"
+// @Produce			application/json
+// @Tags			users
+// @Success			200
+// @Router			/users/create [post]
 func (u *UserController) Create(c *gin.Context) {
 	var payload models.UserRegister
 
@@ -56,6 +64,15 @@ func (u *UserController) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
+// UpdateUserById		godoc
+// @Summary			Update users
+// @Description		Update users data.
+// @Param			users body models.UserUpdate true  "Update user"
+// @Param			id path string true "update user by id"
+// @Tags			users
+// @Produce			application/json
+// @Success			200
+// @Router			/users/{id} [put]
 func (u *UserController) Update(c *gin.Context) {
 	idStr := c.Params.ByName("id")
 	id, err := strconv.Atoi(idStr)
@@ -74,7 +91,7 @@ func (u *UserController) Update(c *gin.Context) {
 
 	var updatedUser models.User
 	result := u.DB.First(&updatedUser, "id = ?", id)
-	if result != nil {
+	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user with that id exists"})
 		return
 	}
@@ -91,6 +108,12 @@ func (u *UserController) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": updatedUser})
 }
 
+// FindAllUsers		godoc
+// @Summary			Get All users.
+// @Description		Return list of users.
+// @Tags			users
+// @Success			200
+// @Router			/users/ [get]
 func (u *UserController) ListAll(c *gin.Context) {
 
 	var users []models.User
@@ -103,6 +126,14 @@ func (u *UserController) ListAll(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": users})
 }
 
+// FindUserById 		godoc
+// @Summary			Get Single user by id.
+// @Param			id path string true "update users by id"
+// @Description		Return the users whoes id value match id.
+// @Produce			application/json
+// @Tags			users
+// @Success			200
+// @Router			/users/{id} [get]
 func (u *UserController) GetById(c *gin.Context) {
 	idStr := c.Params.ByName("id")
 	id, err := strconv.Atoi(idStr)
@@ -121,6 +152,14 @@ func (u *UserController) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
+// DeleteUserById		godoc
+// @Summary			Delete users
+// @Param			id path string true "update users by id"
+// @Description		Remove user data by id.
+// @Produce			application/json
+// @Tags			users
+// @Success			200
+// @Router			/users/{id} [delete]
 func (u *UserController) DeleteById(c *gin.Context) {
 	idStr := c.Params.ByName("id")
 	id, err := strconv.Atoi(idStr)

@@ -1,0 +1,122 @@
+basePath: /api/v1
+definitions:
+  models.UserRegister:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - address
+    - age
+    - email
+    - name
+    - password
+    type: object
+  models.UserUpdate:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: A User service API in Go using Gin framework
+  title: Users Service API
+  version: "1.0"
+paths:
+  /users/:
+    get:
+      description: Return list of users.
+      responses:
+        "200":
+          description: OK
+      summary: Get All users.
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Remove user data by id.
+      parameters:
+      - description: update users by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete users
+      tags:
+      - users
+    get:
+      description: Return the users whoes id value match id.
+      parameters:
+      - description: update users by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get Single user by id.
+      tags:
+      - users
+    put:
+      description: Update users data.
+      parameters:
+      - description: Update user
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserUpdate'
+      - description: update user by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update users
+      tags:
+      - users
+  /users/create:
+    post:
+      description: Save users data in Db.
+      parameters:
+      - description: Create users
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create users
+      tags:
+      - users
+swagger: "2.0"

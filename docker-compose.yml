@@ -1,17 +1,5 @@
 version: '3'
 services:
-  app:
-    container_name: golang_crud_app
-    build: .
-    ports: 
-      - 8080:8080 
-    restart: on-failure
-    volumes:
-      - api:/app
-    depends_on:
-      - db          
-    networks:
-      - golang_crud_project
   db:
     platform: linux/x86_64
     image: mysql:5.7
@@ -26,11 +14,5 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     volumes:
       - database_mysql:/var/lib/mysql
-    networks:
-      - golang_crud_project
 volumes:
-  api:
   database_mysql:
-networks:
-  golang_crud_project:
-    driver: bridge
