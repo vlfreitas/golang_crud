@@ -5,29 +5,21 @@ import (
 	"go-crud/api/controller"
 )
 
-// UserRoute -> Route for user module
-type UserRoute struct {
-	Handler    *gin.Engine
-	Controller controller.UserController
+type UserRouteController struct {
+	userController controller.UserController
 }
 
-// NewUserRoute -> initializes new instance of UserRoute
-func NewUserRoute(
-	controller controller.UserController,
-	handler *gin.Engine,
-) UserRoute {
-	return UserRoute{
-		Handler:    handler,
-		Controller: controller,
-	}
+func NewUserRouteController(
+	userController controller.UserController,
+) UserRouteController {
+	return UserRouteController{userController}
 }
 
-// Setup -> setups user routes
-func (u UserRoute) Setup() {
-	user := u.Handler.Group("/api/v1/users")
-	user.POST("/create", u.Controller.Create)
-	user.PUT("/:id", u.Controller.Update)
-	user.GET("/", u.Controller.ListAll)
-	user.GET("/:id", u.Controller.GetById)
-	user.DELETE("/:id", u.Controller.DeleteById)
+func (u *UserRouteController) Setup(r *gin.RouterGroup) {
+	router := r.Group("/api/v1/users")
+	router.POST("/create", u.userController.Create)
+	router.GET("/:id", u.userController.GetById)
+	router.GET("/", u.userController.ListAll)
+	router.PUT("/:id", u.userController.Update)
+	router.DELETE("/:id", u.userController.DeleteById)
 }

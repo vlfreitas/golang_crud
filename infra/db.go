@@ -21,16 +21,16 @@ func InitDb() Database {
 
 	URL := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS,
 		HOST, DBNAME)
-	fmt.Println(URL)
-	db, err := gorm.Open(mysql.Open(URL))
 
+	DB, err := gorm.Open(mysql.Open(URL))
+	log.Println(URL)
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
 
 	log.Print("Database connect!")
 	return Database{
-		DB: db,
+		DB,
 	}
 
 }

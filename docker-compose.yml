@@ -7,18 +7,19 @@ services:
       - 8080:8080 
     restart: on-failure
     volumes:
-      - api:/usr/src/app/
+      - api:/app
     depends_on:
       - db          
     networks:
       - golang_crud_project
   db:
+    platform: linux/x86_64
     image: mysql:5.7
     container_name: golang_crud_db_mysql
-    ports: 
+    ports:
       - 3306:3306
-    environment: 
-      - MYSQL_ROOT_HOST=${DB_HOST} 
+    environment:
+      - MYSQL_ROOT_HOST=${DB_HOST}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
